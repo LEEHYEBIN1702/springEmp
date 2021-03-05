@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.emp.service.impl.UserMapper">
+
+	<select id="getUser" resultType="userVO">
+	SELECT ID
+	,PASSWORD
+	,NAME
+	,ROLE
+	FROM USERS
+	</select>
+	
+	<select id="getSearchUser" resultType="userVO">
+	SELECT ID
+	,PASSWORD
+	,NAME
+	,ROLE
+	FROM USERS
+	WHERE ID = #{id}
+	</select>
+	
+	<insert id="insertUser" parameterType="userVO">
+	INSERT INTO USERS
+   (ID,
+	PASSWORD,
+	NAME,
+	ROLE)
+	values (#{id},
+	        #{password},
+	        #{name},
+	        #{role})  
+	</insert>
+	
+	<update id="updateUser">
+	UPDATE USERS
+	<set>
+	ID=#{id},
+	PASSWORD=#{password},
+	NAME=#{name},
+	ROLE=#{role}
+	</set>
+	WHERE ID=#{id}
+	</update>
+	
+	<delete id="deleteUser">
+	DELETE FROM USERS
+	WHERE ID=#{id}
+	</delete>
+</mapper>

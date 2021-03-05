@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.emp.service.impl.EmpMapper">
+
+    <!-- 레코드 건수 -->
+    <select id="getCount" resultType="int">
+    SELECT COUNT(*) FROM EMPLOYEES
+     <where>
+	    <if test="department_id !=null and department_id !=''">
+	       AND  DEPARTMENT_ID=#{department_id}
+	    </if>
+	    <if test="job_id !=null and job_id !=''">
+	        AND JOB_ID=#{job_id}
+	    </if>
+	    <if test="first_name !=null and first_name !=''">  <!-- upper like연산자 사용 -->
+	        AND upper(FIRST_NAME) LIKE '%' || upper(#{first_name}) || '%'
+	    </if>
+	    </where>
+    </select>
+
+	<select id="getSearchEmp" parameterType="empSearchVO"
+		resultType="emp">
+		select b.* from (select  rownum rn, a.*    from (	
+        select e.* , d.department_name, j.job_title
+        from employees e
+        INNER JOIN departments d
+        ON e.manager_id = d.manager_id
+        INNER JOIN jobs j
+        ON e.job_id = j.job_id
+        	
+	    <where>
+	    <if test="department_id !=null and department_id !=''">
+	        AND e.DEPARTMENT_ID=#{department_id}
+	    </if>
+	    <if test="job_id !=null and job_id !=''">
+	        AND e.JOB_ID=#{job_id}
+	    </if>
+	    <if test="first_name !=null and first_name !=''">  <!-- upper like연산자 사용 -->
+	        AND upper(FIRST_NAME) LIKE '%' || upper(#{first_name}) || '%'
+	    </if>
+	    </where>
+	ORDER BY e.EMPLOYEE_ID
+	) a ) b where rn between #{start} and #{end}
+	</select>
+	<insert id="insertEmp" parameterType="emp">
+		INSERT INTO EMPLOYEES 
+	  ( EMPLOYEE_ID,
+		LAST_NAME,
+		EMAIL,
+		HIRE_DATE,
+		JOB_ID,
+		FIRST_NAME,
+		DEPARTMENT_ID,
+<if test="manager_id !=null">MANAGER_ID,</if>
+        PHONE_NUMBER)
+		VALUES (#{employee_id},
+		#{last_name},
+		#{email},
+		#{hire_date},
+		#{job_id},
+		#{first_name},
+		#{department_id},
+<if test="manager_id !=null">#{manager_id},</if>
+        #{phone_number})
+	</insert>
+	<update id="updateEmp">
+		UPDATE EMPLOYEES 
+		<set>
+<if test="last_name !=null">    LAST_NAME=#{last_name},</if>
+<if test="email !=null">        EMAIL=#{email},</if>
+<if test="hire_date !=null">    HIRE_DATE=#{hire_date},</if>
+<if test="phone_number !=null"> PHONE_NUMBER=#{phone_number},</if>
+<if test="job_id !=null">       JOB_ID=#{job_id},</if>
+<if test="department_id !=null">DEPARTMENT_ID=#{department_id}</if>
+         </set> 
+		WHERE EMPLOYEE_ID=#{employee_id}
+	</update>
+	<delete id="deleteEmp">
+        DELETE FROM EMPLOYEES
+	    WHERE EMPLOYEE_ID=#{employee_id}
+	</delete>
+	<select id="getEmp" resultType="emp">
+		SELECT *
+		FROM EMPLOYEES
+		WHERE EMPLOYEE_ID=#{employee_id}
+	</select>
+</mapper>
+
