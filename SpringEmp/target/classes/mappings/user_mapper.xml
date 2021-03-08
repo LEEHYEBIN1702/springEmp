@@ -35,10 +35,17 @@
 	<update id="updateUser">
 	UPDATE USERS
 	<set>
-	ID=#{id},
-	PASSWORD=#{password},
-	NAME=#{name},
-	ROLE=#{role}
+	<if test="password != null and password !=''"/>PASSWORD=#{password}
+	<if test="name != null and name !=''"/>,NAME=#{name}
+	<if test="role != null and role !=''"/>,ROLE=#{role}
+	</set>
+	WHERE ID=#{id}
+	</update>
+	
+	<update id="updatePw">
+	UPDATE USERS
+	<set>
+	<if test="password != null and password !=''"/>PASSWORD=#{password}
 	</set>
 	WHERE ID=#{id}
 	</update>

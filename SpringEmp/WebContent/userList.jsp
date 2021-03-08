@@ -44,19 +44,21 @@
 			var tr = $(this).closest('tr');
 			var userId = $(this).closest('tr').find('#hidden_userId').val();
 			$.ajax({
-				url : 'user/'+userId,
-				method : "delete",
+				url : 'deleteuser',
+				data : {id:userId},
+			//	method : "delete",
 				dataType:'json',
 				error:function(xhr,status,msg){
 					console.log("상태값 :" + status + " Http에러메시지 :"+msg);
-				}, success:function(response) {
+				}, 
+				    success:function(response) {
 					if(response.cnt == 1) {
 						tr.remove();
 					}else {
 						alert ('삭제오류');
 					}
 				}
-			})
+			});
 		}); //삭제 버튼 클릭
 	}//userDelete
 	
@@ -67,9 +69,9 @@
 			var userId = $(this).closest('tr').find('#hidden_userId').val();
 			//특정 사용자 조회
 			$.ajax({
-				url:'user/'+userId,
-				type:'GET',
-				contentType:'application/json;charset=utf-8',
+				url:'getuser',
+				data : {id:userId}, //or "id="+userId
+			   //type:'GET', 디폴트가 겟이라 안 적어도 상관 없음
 				dataType:'json',
 				error:function(xhr,status,msg){
 					alert("상태값 :" + status + " Http에러메시지 :"+msg);
@@ -92,10 +94,9 @@
 		//수정 버튼 클릭
 		$('#btnUpdate').on('click',function(){
 		   	$.ajax({
-				url : "user",
-				method : "put",
-				data : JSON.stringify($("#form1").serializeObject()),
-			    contentType : "application/json",
+				url : "updateuser",
+				method : "post",
+				data : $("#form1").serialize(),
 			    dataType : "json",
 			    success : function(response){
 			    	//폼필드 초기화
@@ -120,15 +121,13 @@
 					     role: $("[name=role]").val()
 					     }; */
            $.ajax({
-        	   url : 'user',
+        	   url : 'insertuser',
         	   method : 'post',
-        	   data : JSON.stringify($("#form1").serializeObject()),    //json으로 보낼 거면 JSON.stringify(param) 반드시 해줘야 함
-        	   contentType: 'application/json', //보낼데이터가 json이라는 뜻 -> @RequestBody
-        	   dataType: 'json',                //응답결과가 json == Json.parse()
-        	   success: function(response) {
+        	   data : $("#form1").serialize(), 
+        	   dataType : "json",
+        	   success : function(response){
         		   console.table(response);
-        	   }
-        	   
+        	   } 
            });
 		});//등록 버튼 클릭
 	}//userInsert
@@ -136,7 +135,7 @@
 	//사용자 목록 조회 요청
 	function userList() {
 		$.ajax({
-			url:'user',
+			url:'getuserlist',
 			type:'GET',
 			dataType:'json',
 			error:function(xhr,status,msg){

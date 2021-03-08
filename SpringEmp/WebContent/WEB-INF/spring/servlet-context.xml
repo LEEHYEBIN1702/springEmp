@@ -23,4 +23,15 @@
    <mvc:resources location="/resources/" mapping="/resources/**"></mvc:resources>
    
    <!-- spring 설정 끝! -->
+   
+   <bean id="loginInterceptor" class="com.yedam.emp.common.LoginInterceptor" />
+   <!-- interceptor -->
+   <mvc:interceptors>
+   <mvc:interceptor>
+   <mvc:mapping path="/*"/>
+   <mvc:exclude-mapping path="/login"/> <!-- mapping에서 뺄 땐 mvc:exclude-mapping -->
+   <mvc:exclude-mapping path="/"/>
+   <ref bean="loginInterceptor" />
+   </mvc:interceptor>
+   </mvc:interceptors>
 </beans>

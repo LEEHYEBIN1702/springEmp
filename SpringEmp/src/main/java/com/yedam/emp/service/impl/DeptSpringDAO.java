@@ -49,7 +49,7 @@ public class DeptSpringDAO {
 			DeptVO vo = new DeptVO();
 			vo.setDepartment_id(rs.getInt("department_id"));
 			vo.setDepartment_name(rs.getString("department_name"));
-			vo.setManager_id(rs.getInt("manager_id"));
+			vo.setManager_id(rs.getString("manager_id"));
 			vo.setLocation_id(rs.getInt("location_id"));
 			return vo;
 		}

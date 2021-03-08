@@ -20,4 +20,7 @@ public interface UserMapper {
 		//전체조회
 		public List<UserVO> getUser(UserVO vo);
 		
+		//패스워드변경
+		public int updatePw(UserVO vo);
+		
 }

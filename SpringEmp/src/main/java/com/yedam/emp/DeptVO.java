@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class DeptVO {
 	private int department_id;
 	private String department_name;
-	private int manager_id;
+	private String manager_id;
 	private int location_id;
 	private String last_name;
 	private String city;
